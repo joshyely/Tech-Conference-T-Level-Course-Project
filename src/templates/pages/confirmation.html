@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Confirmation{% endblock %}
+
+{% block section %}
+<article>
+    <h1 class="mb-3">We look forward to seeing you, {{ registrationData.fName }}!</h1>
+    <h3>Further details about the event will be sent to your email: <span class="email">{{ registrationData.email }}</span>.</h3>
+    <br>
+    <h3>For any further questions or queries please email us at <span class="email">example@contact.com</span></h3>
+</article>
+{% endblock %}

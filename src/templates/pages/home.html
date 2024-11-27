@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block pageImage %}
+<div class="container-fluid-xxl" id="home-img">
+    <div class="d-flex align-content-center">
+        <div id="home-cta-container" class="cta-container bg-dark p-4 rounded" style="--bs-bg-opacity: .6;">
+            <h1 class="text-white display-6 mb-5">Tech Conference Bromley</h1>
+            <a href="/register" class="cta-btn btn btn-lg px-5 py-3 btn-primary">Register a Place Now</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block section %}
+<article>
+    <h1 class="mb-4">About</h1>
+    <p>The bromley tech conference will be host to many important gurus in the tech industry.</p>
+    <p>Many hot topics will be discussed such as the use and ethics of AI and Big Data.</p>
+</article>
+{% endblock %}
+
+
+{% block aside %}
+<article class="border-start px-4">
+    <h2 class="mb-4">Event Info</h2>
+    <table id="event-info-table" class="table table-light table-hover">
+        <tbody>
+            <tr><th>Location</th><td>TBA</td></tr>
+            <tr><th>Date</th><td>TBA</td></tr>
+            <tr><th>Time</th><td>TBA</td></tr>
+        </tbody>
+    </table>
+</article>
+{% endblock %}

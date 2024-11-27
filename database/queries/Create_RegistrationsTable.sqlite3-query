@@ -1,0 +1,9 @@
+-- database: ./main.db
+
+CREATE TABLE Registrations(
+    RegistrationID INTEGER PRIMARY KEY,
+    F_Name varchar(20) NOT NULL,
+    L_Name varchar(20) NOT NULL,
+    EMAIL varchar(50) NOT NULL UNIQUE,
+    Registration_Date datetime NOT NULL
+);

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+
+{% block section %}
+<article>
+    <h1 class="mb-5">Register</h1>
+    <form id="register-form" class="border-top" name="register">
+        <div id="full-name-group" class="field-group">
+            <h5>Full Name:</h5>
+            <div class="row g-3">
+                <div class="col-md">
+                    <input class="form-control" type="text" name="f-name" placeholder="First Name">
+                    <div class="invalid-feedback"></div>
+                </div>
+                <div class="col-md">
+                    <input class="form-control" type="text" name="l-name" placeholder="Last Name">
+                    <div class="invalid-feedback"></div>
+                </div>
+            </div>
+        </div>
+        <div id="email-group" class="field-group">
+            <h5>Email:</h5>
+            <input class="form-control" type="email" name="email" placeholder="Email">
+            <div class="invalid-feedback"></div>
+        </div>
+    
+        <input class="btn btn-primary px-5 py-2 mt-2 container-fluid" type="submit" name="submit" value="Register">
+    </form>
+</article>
+{% endblock %}
+
+{% block scripts %}
+<script src="static/scripts/register.js"></script>
+{% endblock %}
