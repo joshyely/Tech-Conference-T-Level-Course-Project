@@ -8,6 +8,11 @@ The website is for a fake tech conference in Bromley and contains:
   • Registration page
   • Profile page
 
+## Instructions
+  1. Install the required dependacies in 'requirements.txt'. Use `pip install -r requirements.txt`
+  2. Make sure you're in the 'src' directory. Use `cd` in the terminal and then the path.
+  3. Type `uvicorn main:app` and click on the link in the terminal.
+
 ## Screenshots
 ### Homepage
 ![image](https://github.com/user-attachments/assets/f4808e41-1315-4058-a102-969fa55c9f4a)
@@ -27,7 +32,4 @@ The website is for a fake tech conference in Bromley and contains:
 ### A very beautiful profile page :)
 ![image](https://github.com/user-attachments/assets/dabed075-193e-4136-b0c3-c83dde2d83fa)
 
-## Instructions
-  1. Install the required dependacies in 'requirements.txt'. Use `pip install -r requirements.txt`
-  2. Make sure you're in the 'src' directory. Use `cd` in the terminal and then the path.
-  3. Type `uvicorn main:app` and click on the link in the terminal.
+
