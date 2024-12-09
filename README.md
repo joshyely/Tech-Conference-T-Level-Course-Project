@@ -3,9 +3,13 @@
 ## About
 This is an assignment I was given for my T-Level course to learn about front-end and back-end development. 
 The website is for a fake tech conference in Bromley and contains:
+
   • A home page
+  
   • Login page
+  
   • Registration page
+  
   • Profile page
 
 ## Instructions
