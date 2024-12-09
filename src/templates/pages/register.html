@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_form.html" %}
 {% block title %}Register{% endblock %}
 
 
@@ -6,6 +6,7 @@
 <article>
     <h1 class="mb-5">Register</h1>
     <form id="register-form" class="border-top" name="register">
+        <div id="invalid-form-feedback" class="h6 text-danger"></div>
         <div id="full-name-group" class="field-group">
             <h5>Full Name:</h5>
             <div class="row g-3">
@@ -24,12 +25,28 @@
             <input class="form-control" type="email" name="email" placeholder="Email">
             <div class="invalid-feedback"></div>
         </div>
+        <div id="password-group" class="field-group">
+            <h5>Password:</h5>
+            <div id="password-container" class="field-container">
+                <input type="password" class="form-control" name="password" placeholder="Password">
+                <div class="invalid-feedback"></div>
+            </div>
+            <div id="confirm-password-container" class="field-container">
+                <input type="password" class="form-control" name="confirm-password" placeholder="Confirm Password">
+                <div class="invalid-feedback"></div>
+            </div>
+        </div>
     
-        <input class="btn btn-primary px-5 py-2 mt-2 container-fluid" type="submit" name="submit" value="Register">
+        <input class="btn btn-primary px-5 py-2 mt-5 container-fluid" type="submit" name="submit" value="Register">
     </form>
 </article>
 {% endblock %}
+{% block aside %}
+
+{% endblock %}
+
+
 
 {% block scripts %}
-<script src="static/scripts/register.js"></script>
+<script src="{{ STATIC_PREFIX }}static/scripts/register.js"></script>
 {% endblock %}

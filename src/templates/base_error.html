@@ -1,0 +1,21 @@
+{% block templateStyles %}
+<style>
+    #error-container{
+        text-align: center;
+    }
+    #error-msg{
+        font-size: 3em;
+    }
+</style>
+{% endblock %}
+   
+
+{% block main %}
+<div id="error-container" class="container-md py-5">
+    <section>
+        {% block section %}
+        {% endblock %}
+    </section>
+</div>
+{% endblock %}
+

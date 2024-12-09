@@ -1,0 +1,17 @@
+{% extends "base_main.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block logoutHref %}/{% endblock %}
+
+{% block section %}
+<article>
+    <h1 class="mb-5">Profile</h1>
+    <h5><span class="text-muted">Name:</span> <span id="full-name"></span></h5>
+    <h5><span class="text-muted">Email:</span> <span id="email"></span></h5>
+    <h5><span class="text-muted">Date Registered:</span> <span id="date-registered"></span></h5>
+</article>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ STATIC_PREFIX }}static/scripts/profile.js"></script>
+{% endblock %}

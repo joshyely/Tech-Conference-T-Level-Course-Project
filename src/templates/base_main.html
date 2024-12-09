@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block main %}
+{% block pageImage %}{% endblock %}
+
+<div id="main-container" class="container-md bg-light px-4 pt-4 rounded main-default">
+    <div class="row">
+        <section class="col-md-8 px-3">
+            {% block section %}
+            
+            {% endblock %}
+        </section>
+        <aside class="col-md px-3">
+            {% block aside %}
+            
+            {% endblock %}
+        </aside>
+    </div>
+</div>
+{% endblock %}

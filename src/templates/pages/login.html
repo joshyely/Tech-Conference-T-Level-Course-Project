@@ -1,0 +1,31 @@
+{% extends "base_form.html" %}
+{% block title %}Login{% endblock %}
+
+
+{% block section %}
+<article>
+    <h1 class="mb-5">Login</h1>
+    <form id="login-form" class="border-top" name="login">
+        <div id="invalid-form-feedback" class="h6 text-danger"></div>
+        <div id="email-group" class="field-group">
+            <h5>Email:</h5>
+            <input class="form-control" type="email" name="email" placeholder="Email">
+            <div class="invalid-feedback"></div>
+        </div>
+        <div id="password-group" class="field-group">
+            <h5>Password:</h5>
+            <input type="password" class="form-control" name="password" placeholder="Password">
+            <div class="invalid-feedback"></div>
+        </div>
+        <input class="btn btn-primary px-5 py-2 mt-5 container-fluid" type="submit" name="submit" value="Login">
+    </form>
+</article>
+{% endblock %}
+
+{% block aside %}
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ STATIC_PREFIX }}static/scripts/login.js"></script>
+{% endblock %}

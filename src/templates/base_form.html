@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div id="main-container" class="container-md bg-light px-4 pt-4 rounded main-form">
+    <section class="px-3">
+        {% block section %}
+        
+        {% endblock %}
+    </section>
+</div>
+{% endblock %}
+
+{% block templateScripts %}
+<script src="{{ STATIC_PREFIX }}static/scripts/helpers/validation.js"></script>
+{% endblock %}

@@ -1,12 +1,18 @@
-{% extends "base.html" %}
+{% extends "base_main.html" %}
 {% block title %}Home{% endblock %}
 
 {% block pageImage %}
 <div class="container-fluid-xxl" id="home-img">
     <div class="d-flex align-content-center">
         <div id="home-cta-container" class="cta-container bg-dark p-4 rounded" style="--bs-bg-opacity: .6;">
-            <h1 class="text-white display-6 mb-5">Tech Conference Bromley</h1>
+            <h1 class="text-white display-6">Tech Conference Bromley</h1>
+            <br>
+            {% if isLoggedIn %}
+            <h3 class="text-white mb-3">Welcome {{ firstName }}!</h2>
+            <a href="/profile" class="cta-btn btn btn-lg px-5 py-3 btn-primary">Go to Profile</a>
+            {% else %}
             <a href="/register" class="cta-btn btn btn-lg px-5 py-3 btn-primary">Register a Place Now</a>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -24,7 +30,7 @@
 
 
 {% block aside %}
-<article class="border-start px-4">
+<article class="px-4">
     <h2 class="mb-4">Event Info</h2>
     <table id="event-info-table" class="table table-light table-hover">
         <tbody>

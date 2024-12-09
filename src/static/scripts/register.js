@@ -1,84 +1,53 @@
-console.log('running register.js..');
-
 const FORM = document.forms['register'];
 const INVALID_FORM_FEEDBACK = document.querySelector('#invalid-form-feedback');
 // Fields
 const F_NAME = FORM['f-name'];
 const L_NAME = FORM['l-name'];
 const EMAIL = FORM['email'];
-
-const PATTERNS = Object.freeze({
-    NAME: new RegExp('^[a-zA-Z]+$'),
-    EMAIL: new RegExp('^[a-zA-Z0-9](?:[a-zA-Z0-9._%+-]*[a-zA-Z0-9])?@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'),
-});
+const PASSWORD = FORM['password'];
+const CONFIRM_PASSWORD = FORM['confirm-password'];
 
 
 function showFormErrorMessage(msg)
 {
     FORM.classList.add('was-validated');
 }
-
-
-function isPresent(inputElem)
+function validateAll()
 {
-    if (inputElem.value.trim() == '')
-    {
-        inputElem.setCustomValidity('Field Required');
-        inputElem.parentElement.querySelector('.invalid-feedback').innerHTML = 'Field cannot be blank.';
-        return false;
-    }
-    else
+    if (
+        validateName(F_NAME) && 
+        validateName(L_NAME) && 
+        validateEmail(EMAIL) && 
+        validatePassword(PASSWORD) && 
+        validateConfirmPassword(PASSWORD)
+    )
     {
         return true;
     }
-}
-
-function isAlpha(inputElem)
-{
-    if (!PATTERNS.NAME.test(inputElem.value))
-    {
-        inputElem.setCustomValidity('Only Alpha');
-        inputElem.parentElement.querySelector('.invalid-feedback').innerHTML = 'Must only contain alphabetical characters and no spaces.';
-        return false;
-    }
-    else
-    {
-        return true;
-    }
-}
-
-function isEmail(inputElem)
-{
-    if (!PATTERNS.EMAIL.test(inputElem.value))
-    {
-        inputElem.setCustomValidity('Invalid Email');
-        inputElem.parentElement.querySelector('.invalid-feedback').innerHTML = 'Email is invalid.';
-        return false;
-    }
-    else
-    {
-        return true;
-    }
+    return false;
 }
 
 
-function validateName(inputElem)
-{
-    if (isPresent(inputElem) && isAlpha(inputElem))
-    {
-        inputElem.setCustomValidity('');
-    }
-    inputElem.parentElement.classList.add('was-validated');
-}
-function validateEmail(inputElem)
-{
-    if (isPresent(inputElem) && isEmail(inputElem))
-    {
-        inputElem.setCustomValidity('');
-    }
-    inputElem.parentElement.classList.add('was-validated');
-}
 
+// Field event listeners
+F_NAME.addEventListener('focusout', ()=>{
+    validateName(F_NAME);
+});
+L_NAME.addEventListener('focusout', ()=>{
+    validateName(L_NAME);
+});
+EMAIL.addEventListener('focusout', ()=>{
+    validateEmail(EMAIL);
+});
+PASSWORD.addEventListener('focusout', ()=>{
+    validatePassword(PASSWORD);
+});
+CONFIRM_PASSWORD.addEventListener('focusout', ()=>{
+    validateConfirmPassword(CONFIRM_PASSWORD);
+});
+
+
+// Form submittion functions
 function backendValidationError(responseDetails)
 {   
     INVALID_FORM_FEEDBACK.innerHTML = 'Some fields are invalid.';
@@ -94,6 +63,12 @@ function backendValidationError(responseDetails)
             }
         });
     });
+}
+function userExistsError()
+{
+    EMAIL.setCustomValidity('User Exists!');
+    INVALID_FORM_FEEDBACK.innerHTML = 'User with that email already exists!';
+    EMAIL.parentElement.classList.add('was-validated');
 }
 function databaseError(responseJson)
 {
@@ -114,45 +89,46 @@ function displayGenericError(responseJson)
     INVALID_FORM_FEEDBACK.innerHTML = 'Something went wrong.';
 }
 
-
-F_NAME.addEventListener('focusout', ()=>{
-    validateName(F_NAME)
-});
-L_NAME.addEventListener('focusout', ()=>{
-    validateName(L_NAME)
-});
-EMAIL.addEventListener('focusout', ()=>{
-    validateEmail(EMAIL)
-});
-
 FORM.addEventListener('submit', async event => {
     event.preventDefault();
-    fetch('/api/register', {
-        method: "POST",
-        body: JSON.stringify({
-          fName: F_NAME.value,
-          lName: L_NAME.value,
-          email: EMAIL.value
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8"
-        }
-      })
-      .then(async response => {
-            let json = await response.json()
-            switch(response.status)
-            {
-                case 422: // Validation Error
-                    backendValidationError(json.detail);
-                    break;
-                case 500: // Internal Server Error (Database)
-                    databaseError(json);
-                    break;
-                case 201: //row creation success
-                    displayConfirmation(json);
-                    break;
-                default:
-                    displayGenericError(json);
+    if (validateAll())
+    {
+        fetch('/rest/registration/register', {
+            method: "POST",
+            body: JSON.stringify({
+            fName: F_NAME.value,
+            lName: L_NAME.value,
+            email: EMAIL.value,
+            password: PASSWORD.value
+            }),
+            headers: {
+            "Content-type": "application/json; charset=UTF-8"
             }
         })
+        .then(async response => {
+                let json = await response.json()
+                console.log(`status: ${response.status}`)
+                switch(response.status)
+                {
+                    case 422: // Validation Error
+                        backendValidationError(json.detail);
+                        break;
+                    case 226: // User Exists
+                        userExistsError()
+                        break;
+                    case 500: // Internal Server Error (Database)
+                        databaseError(json);
+                        break;
+                    case 201: //row creation success
+                        displayConfirmation(json);
+                        break;
+                    default:
+                        displayGenericError(json);
+                }
+            });
+    }
+    else
+    {
+        return false;
+    }
 });
