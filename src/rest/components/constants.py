@@ -16,7 +16,7 @@ class ValidFields(Enum):
     EMAIL = EmailStr
 
 class TOKEN_VARS(Enum):
-    SECRET_KEY = '6d1ac7c0949dbbec8f60c4d8be82473b66c882c57486422039b049c560d8e4a3'
+    SECRET_KEY = '6d1ac7c0949dbbec8f60c4d8be82473b66c882c57486422039b049c560d8e4a3' # Ummmm ignore this minor mistake.. I'm a promising developer i swear :)
     ALGORITHM = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES = 30
     OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl='rest/login/token')
