@@ -1,7 +1,8 @@
 const FORM = document.forms['login'];
 const EMAIL = FORM['email'];
 const PASSWORD = FORM['password'];
-const INVALID_FORM_FEEDBACK = document.querySelector('#invalid-form-feedback');
+const ERROR = FORM.querySelector(FORM_ELEMENT_NAMES.ERROR_FEEDBACK);
+
 
 
 // Validates if token is working as it should
@@ -32,39 +33,25 @@ function saveFirstname(json)
 }
 
 
-// FRONTEND MESSAGES
-const displayInvalidCredentials = () => INVALID_FORM_FEEDBACK.innerHTML = 'Email or Password is incorrect.'
-const displayServerError = () => INVALID_FORM_FEEDBACK.innerHTML = 'Server Error. Please try again later.'
-const displayTokenError = () => INVALID_FORM_FEEDBACK.innerHTML = 'Token Error. Please try again or contact support.'
-const displayLoginSuccess = () => {
-    location.href = '/'
-    alert('Login Successful!')
-}
-async function displayResponseMsg(response, json)
+
+
+
+
+async function ifCorrectCredentials(response)
 {
-    switch(response.status)
+    let json = await response.json();
+    let tokenStatus = await sendTokenAcknowledgement(json.access_token);
+    if(tokenStatus == 200)
     {
-        case 401:
-            displayInvalidCredentials();
-            break;
-        case 500:
-            displayServerError();
-            break;
-        case 302:
-            let tokenStatus = await sendTokenAcknowledgement(json.access_token);
-            if(tokenStatus == 200)
-            {
-                createTokenCookie(json);
-                saveFirstname(json);
-                displayLoginSuccess();
-            }
-            else
-            {
-                displayTokenError();
-            }
+        createTokenCookie(json);
+        saveFirstname(json);
+        location.href = '/';
+    }
+    else
+    {
+        loginResponseMessages.displayTokenError();
     }
 }
-
 function validateAll()
 {
     if (validateEmail(EMAIL) && validatePassword(PASSWORD))
@@ -74,20 +61,21 @@ function validateAll()
     return false;
 }
 
+let loginResponseMessages = new ResponseMessages(formErrorElem=ERROR)
+loginResponseMessages.displaySuccess = ifCorrectCredentials
+
 
 // EVENT LISTENERS
 EMAIL.addEventListener('focusout', ()=>{
     validateEmail(EMAIL);
 });
 PASSWORD.addEventListener('focusout', ()=>{
-    validateLoginPassword(PASSWORD);
+    validatePassword(PASSWORD);
 });
 FORM.addEventListener('submit', async event=>{
     event.preventDefault();
     if (validateAll())
     {
-        console.log(`email: ${EMAIL.value}\t typeof: ${typeof(EMAIL.value)}`)
-        console.log(`password: ${PASSWORD.value}\t typeof: ${typeof(PASSWORD.value)}`)
         fetch('/rest/login/token', {
             method: 'POST',
             body: JSON.stringify({
@@ -99,15 +87,12 @@ FORM.addEventListener('submit', async event=>{
             }
         })
         .then(async response => {
-            let json = await response.json();
-            displayResponseMsg(response, json)
+            loginResponseMessages.authenticateAction(response);
         });
     }
-    else
-    {
-        return false;
-    }
 });
+
+
 
 
 

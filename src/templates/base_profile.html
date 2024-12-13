@@ -4,17 +4,22 @@
 {% block pageImage %}{% endblock %}
 
 <div id="main-container" class="container-md bg-light px-4 pt-4 rounded main-default">
-    <div class="row">
-        <section class="col-md-8 px-3">
+    <div id="profile-row" class="row">
+        <section id="profile-section" class="col-md-9 px-3">
             {% block section %}
             
             {% endblock %}
         </section>
-        <aside id="default-aside" class="col-md px-3">
+        <aside id="profile-aside" class="col-md">
             {% block aside %}
             
             {% endblock %}
         </aside>
     </div>
 </div>
+{% endblock %}
+
+{% block templateScripts %}
+<script src="{{ STATIC_PREFIX }}static/scripts/helpers/validation.js"></script>
+<script src="{{STATIC_PREFIX}}static/scripts/helpers/response_messages.js"></script>
 {% endblock %}

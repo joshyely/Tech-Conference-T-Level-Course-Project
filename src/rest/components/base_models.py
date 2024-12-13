@@ -8,7 +8,7 @@ from datetime import datetime
 from .constants import ValidFields
 
 class User(BaseModel):
-    UserID: int|None = None
+    userID: int|None = None
     fName: ValidFields.NAME.value
     lName: ValidFields.NAME.value
     email: ValidFields.EMAIL.value
@@ -39,4 +39,15 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    email: ValidFields.EMAIL.value | None = None
+    userID: int | None = None
+
+
+class PasswordPlusToken(BaseModel):
+    token: Token
+    password: str
+
+class NewPassword(PasswordPlusToken):
+    newPassword: ValidFields.PASS.value
+
+class NewEmail(PasswordPlusToken):
+    newEmail: ValidFields.EMAIL.value

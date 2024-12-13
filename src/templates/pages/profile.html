@@ -1,17 +1,192 @@
-{% extends "base_main.html" %}
+{% extends "base_profile.html" %}
 {% block title %}Profile{% endblock %}
+
+{% block styles %}
+<style>
+    #main-container{
+        min-height:80vh;
+    }
+    #delete-account-tab-btn .active{
+        background-color: var(--bs-danger);
+        color:white;
+    }
+    #delete-account-tab-btn a{
+        color: var(--bs-danger);
+    }
+    #delete-btn{
+        width: 40%;
+        height: 6vh;
+    }
+</style>
+{% endblock %}
 
 {% block logoutHref %}/{% endblock %}
 
 {% block section %}
+<div class="tab-content">
+    <article id="profile" class="tab-pane container active">
+        <h1 class="mb-5">Profile</h1>
+        <div class="profile-content">
+            <h5><span class="text-muted">Name:</span> <span id="full-name"></span></h5>
+            <h5><span class="text-muted">Email:</span> <span id="email"></span></h5>
+            <h5><span class="text-muted">Date Registered:</span> <span id="date-registered"></span></h5>
+        </div>
+    </article>
+    <article id="options" class="tab-pane container fade">
+        <h1 class="mb-5">Options</h1>
+        <div class="profile-content">
+            <div id="email-section" class="profile-section">
+                <div class="heading-container">
+                    <h3>Email</h3>
+                    <button class="btn btn-primary change-btn collapse-btn" data-bs-toggle="collapse" data-bs-target="#change-email-form">
+                        <span class="change-btn-text change-btn-text-active">Change Email</span>
+                        <span class="change-btn-text">Hide</span>
+                    </button>
+                </div>
+                <form id="change-email-form" class="collapse" name="change-email">
+                    <div class="h6 text-success success-form-feedback"></div>
+                    <div class="h6 text-danger invalid-form-feedback"></div>
+                    <div id="new-email-group" class="field-group">
+                        <h5>New Email:</h5>
+                        <div id="new-email-container" class="field-container">
+                            <input class="form-control" type="email" name="new-email" placeholder="Email">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div id="confirm-new-email-container" class="field-container">
+                            <input class="form-control" type="email" name="confirm-new-email" placeholder="Confirm Email">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div id="new-email-password-group" class="field-group">
+                        <h5>Password:</h5>
+                        <input type="password" class="form-control" name="password" placeholder="Password">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <input class="btn btn-primary px-5 py-2 mt-3" type="submit" name="submit" value="Update Email">
+                </form>
+            </div>
+            <div id="password-section" class="profile-section">
+                <div class="heading-container">
+                    <h3>Password</h3>
+                    <button class="btn btn-primary change-btn collapse-btn" data-bs-toggle="collapse" data-bs-target="#change-password-form">
+                        <span class="change-btn-text change-btn-text-active">Change Password</span>
+                        <span class="change-btn-text">Hide</span>
+                    </button>
+                </div>
+                <form id="change-password-form" class="collapse" name="change-password">
+                    <div class="h6 text-success success-form-feedback"></div>
+                    <div class="h6 text-danger invalid-form-feedback"></div>
+                    <div id="old-password-group" class="field-group">
+                        <h5>Old Password:</h5>
+                        <input type="password" class="form-control" name="old-password" placeholder="Password">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div id="new-password-group" class="field-group">
+                        <h5>New Password:</h5>
+                        <div id="new-password-container" class="field-container">
+                            <input type="password" class="form-control" name="new-password" placeholder="Password">
+                            <div class="invalid-feedback"></div>
+                            <div class="pattern-checks-container row">
+                                <div id="lower-check" class="pattern-check col-md-1">
+                                    <div class="pattern-check-box" type="checkbox" id="flexCheckDefault">
+                                        <i class="bi bi-check2"></i>
+                                    </div>
+                                    <p class="pattern-check-label">
+                                        Lowercase
+                                    </p>
+                                </div>
+                                <div id="upper-check"  class="pattern-check col-md-1">
+                                    <div class="pattern-check-box" type="checkbox" id="flexCheckDefault">
+                                        <i class="bi bi-check2"></i>
+                                    </div>
+                                    <p class="pattern-check-label">
+                                        Uppercase
+                                    </p>
+                                </div>
+                                <div id="digit-check"  class="pattern-check col-md-1">
+                                    <div class="pattern-check-box" type="checkbox" id="flexCheckDefault">
+                                        <i class="bi bi-check2"></i>
+                                    </div>
+                                    <p class="pattern-check-label">
+                                        Digit
+                                    </p>
+                                </div>
+                                <div id="symbol-check"  class="pattern-check col-md-1">
+                                    <div class="pattern-check-box" type="checkbox" id="flexCheckDefault">
+                                        <i class="bi bi-check2"></i>
+                                    </div>
+                                    <p class="pattern-check-label">
+                                        Symbol ($, £, @, !, #, ~)
+                                    </p>
+                                </div>
+                                <div id="length-check"  class="pattern-check col-md-1">
+                                    <div class="pattern-check-box" type="checkbox" id="flexCheckDefault">
+                                        <i class="bi bi-check2"></i>
+                                    </div>
+                                    <p class="pattern-check-label">
+                                        At least 8 characters
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="confirm-password-container" class="field-container">
+                            <input type="password" class="form-control" name="confirm-new-password" placeholder="Confirm Password">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                
+                    <input class="btn btn-primary px-5 py-2 mt-3" type="submit" name="submit" value="Update Password">
+                </form>
+            </div>
+
+        </div>
+        
+    </article>
+    <article id="account-deletion" class="tab-pane container fade">
+        <h1 class="mb-5">Account Deletion</h1>
+        <div id="delete" class="profile-content">
+            <button id="delete-btn" class="btn btn-danger">DELETE ACCOUNT</button>
+        </div>
+        <div id="delete-confirm" class="profile-content">
+            <div class="heading-container">
+                <h3 class="text-danger">Are you sure you want to delete your account?</h3>
+                <button id="cancel-btn" class="btn btn-danger">CANCEL</button>
+            </div>
+            <h5 class="mt-3">Confirm Deletion</h5>
+            <p class="text-danger">There will be no way to reverse this action!</p>
+            <form id="delete-confirm-form" name="delete-user">
+                <div class="h6 text-danger invalid-form-feedback"></div>
+                <div id="delete-password-group" class="field-group">
+                    <h5>Password:</h5>
+                    <input type="password" class="form-control" name="password" placeholder="Password">
+                    <div class="invalid-feedback"></div>
+                </div>
+                <input class="btn btn-danger px-5 py-2 mt-3" type="submit" name="submit" value="DELETE ACCOUNT">
+            </form>
+        </div>
+        
+    </article>
+</div>
+{% endblock %}
+
+{% block aside %}
 <article>
-    <h1 class="mb-5">Profile</h1>
-    <h5><span class="text-muted">Name:</span> <span id="full-name"></span></h5>
-    <h5><span class="text-muted">Email:</span> <span id="email"></span></h5>
-    <h5><span class="text-muted">Date Registered:</span> <span id="date-registered"></span></h5>
+    <button id="profile-nav-collapse-btn" class="btn btn-primary container-fluid" data-bs-toggle="collapse" data-bs-target="#profile-nav-collapse">
+        <i class="bi bi-list"></i>
+    </button>
+    <div id="profile-nav-collapse" class="collapse">
+        <ul id="profile-nav" class="nav nav-pills flex-column">
+            <li class="nav-item"><a href="#profile" class="nav-link bs-primary active" data-bs-toggle="tab">Profile</a></li>
+            <li class="nav-item"><a href="#options" class="nav-link" data-bs-toggle="tab">Options</a></li>
+            <li id="delete-account-tab-btn" class="nav-item"><a href="#account-deletion"class="nav-link" data-bs-toggle="tab">Account Deletion</a></li>
+        </ul>
+    </div>
 </article>
 {% endblock %}
 
 {% block scripts %}
 <script src="{{ STATIC_PREFIX }}static/scripts/profile.js"></script>
+<script src="{{ STATIC_PREFIX }}static/scripts/change_password.js"></script>
+<script src="{{ STATIC_PREFIX }}static/scripts/change_email.js"></script>
+<script src="{{ STATIC_PREFIX }}static/scripts/delete_user.js"></script>
 {% endblock %}

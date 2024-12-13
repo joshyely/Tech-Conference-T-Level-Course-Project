@@ -11,14 +11,16 @@ from .exceptions import UserExists
 
 DB_PATH = '/workspaces/codespaces-blank/database/main.db'
 
-def addUser(user: UserRegister):
-    def userExists(email: str):
-        cursor.execute('SELECT * FROM Users WHERE Email=?', (email,))
-        user = cursor.fetchone()
-        if not user:
-            return False
-        return True
 
+def __userExists__(cursor:sqlite3.Cursor, email: str):
+    cursor.execute('SELECT * FROM Users WHERE Email=?', (email,))
+    user = cursor.fetchone()
+    print(f'userExists: {user}')
+    if not user:
+        return False
+    return True
+
+def addUser(user: UserRegister):
     params = (
         user.fName,
         user.lName,
@@ -29,8 +31,7 @@ def addUser(user: UserRegister):
     with sqlite3.connect(DB_PATH) as conn:
         try:
             cursor = conn.cursor()
-
-            if userExists(user.email):
+            if __userExists__(cursor, user.email):
                 raise UserExists
             cursor.execute('''INSERT INTO Users
                         (F_Name, L_Name, Email, Hashed_Password, Registration_Date)
@@ -49,11 +50,11 @@ def addUser(user: UserRegister):
 
 
 
-def getUser(email: str):
+def getUser(*, userID:int|None=None, email:str|None=None):
     with sqlite3.connect(DB_PATH) as conn:
         try:
             cursor = conn.cursor()
-            cursor.execute('SELECT * FROM Users WHERE Email=?', (email,))
+            cursor.execute('SELECT * FROM Users WHERE UserID=? OR Email=?', (userID, email))
             user = cursor.fetchone()
             return user
         except sqlite3.DatabaseError as e:
@@ -62,11 +63,11 @@ def getUser(email: str):
             print(e)
         cursor.close()
 
-def getUserSafeInfo(email: str):
+def getUserSafeInfo(*, userID:int|None=None, email:str|None=None):
     with sqlite3.connect(DB_PATH) as conn:
         try:
             cursor = conn.cursor()
-            cursor.execute('SELECT UserID, F_Name, L_Name, Email, Registration_Date, isDisabled FROM Users WHERE Email=?', (email,))
+            cursor.execute('SELECT UserID, F_Name, L_Name, Email, Registration_Date, isDisabled FROM Users WHERE UserID=? OR Email=?', (userID, email))
             user = cursor.fetchone()
             return user
         except sqlite3.DatabaseError as e:
@@ -75,11 +76,11 @@ def getUserSafeInfo(email: str):
             print(e)
         cursor.close()
 
-def getUserHash(email: str):
+def getUserHash(*, userID:int|None=None, email:str|None=None):
     with sqlite3.connect(DB_PATH) as conn:
         try:
             cursor = conn.cursor()
-            cursor.execute('SELECT Hashed_Password FROM Users WHERE Email=?', (email,))
+            cursor.execute('SELECT Hashed_Password FROM Users WHERE Email=? OR UserID=?', (email, userID))
             user = cursor.fetchone()
             return user
         except sqlite3.DatabaseError as e:
@@ -89,11 +90,11 @@ def getUserHash(email: str):
         cursor.close()
 
 
-def deleteUser(email: str):
+def deleteUser(*, userID:int|None=None, email:str|None=None):
     with sqlite3.connect(DB_PATH) as conn:
         try:
             cursor = conn.cursor()
-            cursor.execute('DELETE FROM Users WHERE Email=?', (email,))
+            cursor.execute('DELETE FROM Users WHERE Email=? OR UserID=?', (email, userID))
             conn.commit()
         except sqlite3.DatabaseError as e:
             raise sqlite3.DatabaseError
@@ -101,11 +102,32 @@ def deleteUser(email: str):
             print(e)
         cursor.close()
 
-def changePassword(email: str, hashedPassword: str):
+def changePassword(hashedPassword: str, *, userID:int|None=None, email:str|None=None):
     with sqlite3.connect(DB_PATH) as conn:
         try:
             cursor = conn.cursor()
-            cursor.execute('UPDATE Users Hashed_Password=? WHERE Email=?', (hashedPassword, email))
-        except:
-            pass
+            cursor.execute('UPDATE Users SET Hashed_Password=? WHERE Email=? OR UserID=?', (hashedPassword, email, userID))
+            conn.commit()
+        except sqlite3.DatabaseError as e:
+            raise sqlite3.DatabaseError
+        except Exception as e:
+            print(e)
+        cursor.close()
+
+def changeEmail(newEmail: str, *, userID:int|None=None, email:str|None=None):
+    with sqlite3.connect(DB_PATH) as conn:
+        try:
+            cursor = conn.cursor()
+            if __userExists__(cursor, newEmail):
+                print('user exists!')
+                raise UserExists
+            cursor.execute('UPDATE Users SET Email=? WHERE Email=? OR UserID=?', (newEmail, email, userID))
+            conn.commit()
+        except sqlite3.DatabaseError as e:
+            raise sqlite3.DatabaseError
+        except UserExists:
+            raise UserExists
+        except Exception as e:
+            print(e)
+        cursor.close()
 

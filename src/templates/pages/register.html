@@ -6,7 +6,7 @@
 <article>
     <h1 class="mb-5">Register</h1>
     <form id="register-form" class="border-top" name="register">
-        <div id="invalid-form-feedback" class="h6 text-danger"></div>
+        <div class="h6 text-danger invalid-form-feedback"></div>
         <div id="full-name-group" class="field-group">
             <h5>Full Name:</h5>
             <div class="row g-3">
@@ -25,11 +25,54 @@
             <input class="form-control" type="email" name="email" placeholder="Email">
             <div class="invalid-feedback"></div>
         </div>
+        
         <div id="password-group" class="field-group">
             <h5>Password:</h5>
             <div id="password-container" class="field-container">
                 <input type="password" class="form-control" name="password" placeholder="Password">
                 <div class="invalid-feedback"></div>
+                <div class="pattern-checks-container row">
+                    <div id="lower-check" class="pattern-check col-md-1">
+                        <div class="pattern-check-box" type="checkbox" id="flexCheckDefault">
+                            <i class="bi bi-check2"></i>
+                        </div>
+                        <p class="pattern-check-label">
+                            Lowercase
+                        </p>
+                    </div>
+                    <div id="upper-check"  class="pattern-check col-md-1">
+                        <div class="pattern-check-box" type="checkbox" id="flexCheckDefault">
+                            <i class="bi bi-check2"></i>
+                        </div>
+                        <p class="pattern-check-label">
+                            Uppercase
+                        </p>
+                    </div>
+                    <div id="digit-check"  class="pattern-check col-md-1">
+                        <div class="pattern-check-box" type="checkbox" id="flexCheckDefault">
+                            <i class="bi bi-check2"></i>
+                        </div>
+                        <p class="pattern-check-label">
+                            Digit
+                        </p>
+                    </div>
+                    <div id="symbol-check"  class="pattern-check col-md-1">
+                        <div class="pattern-check-box" type="checkbox" id="flexCheckDefault">
+                            <i class="bi bi-check2"></i>
+                        </div>
+                        <p class="pattern-check-label">
+                            Symbol ($, £, @, !, #, ~)
+                        </p>
+                    </div>
+                    <div id="length-check"  class="pattern-check col-md-1">
+                        <div class="pattern-check-box" type="checkbox" id="flexCheckDefault">
+                            <i class="bi bi-check2"></i>
+                        </div>
+                        <p class="pattern-check-label">
+                            At least 8 characters
+                        </p>
+                    </div>
+                </div>
             </div>
             <div id="confirm-password-container" class="field-container">
                 <input type="password" class="form-control" name="confirm-password" placeholder="Confirm Password">

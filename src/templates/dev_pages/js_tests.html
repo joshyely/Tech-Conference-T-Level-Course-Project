@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Testing Page</h1>
+    <div id="dummy-form-feedback"></div>
+    <div class="elem"></div>
+</body>
+<script src="{{STATIC_PREFIX}}static/scripts/helpers/response_messages.js"></script>
+<script>
+    __response_messages_unitTests__()
+    console.log(document.querySelector('#dummy-form-feedback'));
+    console.log(document.querySelector('.elem'));
+</script>
+</html>

@@ -26,7 +26,7 @@ def home(request: Request):
 
 @app.get('/register')
 def register(request: Request):
-    return templates.TemplateResponse('pages/register.html', {'request': request, 'STATIC_PREFIX': '/'})
+    return templates.TemplateResponse('pages/register.html', {'request': request, 'STATIC_PREFIX': '../'})
 
 @app.get('/confirmation/{registrationDataString}')
 def confirmation(request: Request, registrationDataString: str):
@@ -41,7 +41,7 @@ def confirmation(request: Request, registrationDataString: str):
 
 @app.get('/login')
 def login(request: Request):
-    return templates.TemplateResponse('pages/login.html', {'request': request, 'STATIC_PREFIX': '/'})
+    return templates.TemplateResponse('pages/login.html', {'request': request, 'STATIC_PREFIX': '../'})
 
 @app.get('/profile')
 def profile(request: Request):
@@ -50,3 +50,7 @@ def profile(request: Request):
         return templates.TemplateResponse('pages/profile.html', {'request': request, 'STATIC_PREFIX': '../', 'isLoggedIn': True})
     else:
         return templates.TemplateResponse('pages/profile_error.html', {'request': request, 'STATIC_PREFIX': '../', 'isLoggedIn': False})
+    
+@app.get('/testing')
+def testing(request: Request):
+    return templates.TemplateResponse('dev_pages/js_tests.html', {'request': request, 'STATIC_PREFIX': '/'})

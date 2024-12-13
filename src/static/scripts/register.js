@@ -1,5 +1,5 @@
 const FORM = document.forms['register'];
-const INVALID_FORM_FEEDBACK = document.querySelector('#invalid-form-feedback');
+const ERROR = FORM.querySelector(FORM_ELEMENT_NAMES.ERROR_FEEDBACK);
 // Fields
 const F_NAME = FORM['f-name'];
 const L_NAME = FORM['l-name'];
@@ -12,45 +12,26 @@ function showFormErrorMessage(msg)
 {
     FORM.classList.add('was-validated');
 }
+
+
+// THIS FILE'S HELPER FUNCTIONS
 function validateAll()
 {
     if (
         validateName(F_NAME) && 
         validateName(L_NAME) && 
         validateEmail(EMAIL) && 
-        validatePassword(PASSWORD) && 
-        validateConfirmPassword(PASSWORD)
+        validateRegistrationPassword(PASSWORD) && 
+        validateConfirmPassword(CONFIRM_PASSWORD, PASSWORD)
     )
     {
         return true;
     }
     return false;
 }
-
-
-
-// Field event listeners
-F_NAME.addEventListener('focusout', ()=>{
-    validateName(F_NAME);
-});
-L_NAME.addEventListener('focusout', ()=>{
-    validateName(L_NAME);
-});
-EMAIL.addEventListener('focusout', ()=>{
-    validateEmail(EMAIL);
-});
-PASSWORD.addEventListener('focusout', ()=>{
-    validatePassword(PASSWORD);
-});
-CONFIRM_PASSWORD.addEventListener('focusout', ()=>{
-    validateConfirmPassword(CONFIRM_PASSWORD);
-});
-
-
-// Form submittion functions
 function backendValidationError(responseDetails)
 {   
-    INVALID_FORM_FEEDBACK.innerHTML = 'Some fields are invalid.';
+    formFeedBackElem.innerHTML = 'Some fields are invalid.';
     responseDetails.forEach(detail => {
         let fields = Array.from(FORM.querySelectorAll('.form-control'))
         fields.forEach((field, index) => {
@@ -64,31 +45,54 @@ function backendValidationError(responseDetails)
         });
     });
 }
-function userExistsError()
+function userExistsError(response)
 {
     EMAIL.setCustomValidity('User Exists!');
-    INVALID_FORM_FEEDBACK.innerHTML = 'User with that email already exists!';
+    ERROR.innerHTML = 'User with that email already exists!';
     EMAIL.parentElement.classList.add('was-validated');
 }
-function databaseError(responseJson)
+async function displayConfirmation(response)
 {
-    INVALID_FORM_FEEDBACK.innerHTML = 'Database error.';
-}
-function displayConfirmation(responseJson) {
+    let json = await response.json();
     console.log('registration success!');
     
     // URL-encode the responseJson object
-    let responseURI = encodeURIComponent(JSON.stringify(responseJson));
+    let responseURI = encodeURIComponent(JSON.stringify(json));
     console.log("Encoded URL: ", responseURI);
     
     // Redirect to the confirmation page
     location.href = `/confirmation/${responseURI}`;
 }
-function displayGenericError(responseJson)
-{
-    INVALID_FORM_FEEDBACK.innerHTML = 'Something went wrong.';
-}
 
+// ACCESSING response_messages.js HELPER
+let registerResponseMessages = new ResponseMessages(formErrorElem=ERROR)
+registerResponseMessages.displaySuccess = displayConfirmation
+registerResponseMessages.displayEntryExistsError = userExistsError
+
+
+// Event listeners
+F_NAME.addEventListener('focusout', ()=>{
+    validateName(F_NAME);
+});
+L_NAME.addEventListener('focusout', ()=>{
+    validateName(L_NAME);
+});
+EMAIL.addEventListener('focusout', ()=>{
+    validateEmail(EMAIL);
+});
+PASSWORD.addEventListener('focusout', ()=>{
+    validateRegistrationPassword(PASSWORD);
+});
+PASSWORD.addEventListener('input', ()=> {
+    toggleInputCheckmarks(
+        PASSWORD,
+        patternsDict=PATTERNS.PASSWORD,
+        idList=CHECKMARK_IDS.PASSWORD
+    );
+})
+CONFIRM_PASSWORD.addEventListener('focusout', ()=>{
+    validateConfirmPassword(CONFIRM_PASSWORD, PASSWORD);
+});
 FORM.addEventListener('submit', async event => {
     event.preventDefault();
     if (validateAll())
@@ -106,29 +110,8 @@ FORM.addEventListener('submit', async event => {
             }
         })
         .then(async response => {
-                let json = await response.json()
-                console.log(`status: ${response.status}`)
-                switch(response.status)
-                {
-                    case 422: // Validation Error
-                        backendValidationError(json.detail);
-                        break;
-                    case 226: // User Exists
-                        userExistsError()
-                        break;
-                    case 500: // Internal Server Error (Database)
-                        databaseError(json);
-                        break;
-                    case 201: //row creation success
-                        displayConfirmation(json);
-                        break;
-                    default:
-                        displayGenericError(json);
-                }
-            });
-    }
-    else
-    {
-        return false;
+            registerResponseMessages.createAction(response);
+        });
     }
 });
+
